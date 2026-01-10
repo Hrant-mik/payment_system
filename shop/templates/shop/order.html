@@ -1,0 +1,13 @@
+<h1>Your Order</h1>
+
+{% for oi in order.items.all %}
+  <p>{{ oi.item.name }} × {{ oi.quantity }}</p>
+{% empty %}
+  <p>Order is empty</p>
+{% endfor %}
+
+<h3>Total: ${{ order.total_amount|floatformat:2 }}</h3>
+
+<a href="/pay-order/">
+  <button>Pay Order</button>
+</a>

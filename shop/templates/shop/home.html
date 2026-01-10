@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shop</title>
+  <style>
+    body { font-family: Arial; background:#f5f5f5 }
+    .item { background:#fff; padding:20px; margin:20px; border-radius:8px }
+    button { padding:8px 12px; margin-top:5px }
+  </style>
+</head>
+<body>
+
+<h1>Products</h1>
+<a href="/order/">🛒 Go to Order</a>
+
+{% for item in items %}
+<div class="item">
+  <h2>{{ item.name }}</h2>
+  <p>{{ item.description }}</p>
+  <p><b>${{ item.price|floatformat:2 }}</b></p>
+  <p><b>{{ item.price|floatformat:2 }} {{ item.currency|upper }}</b></p>
+
+  <form action="/add/{{ item.id }}/" method="post">
+    {% csrf_token %}
+    Qty: <input type="number" name="quantity" value="1" min="1">
+    <button>Add to Order</button>
+  </form>
+
+  <a href="/buy/{{ item.id }}/">
+    <button>Buy now</button>
+  </a>
+</div>
+{% endfor %}
+
+</body>
+</html>
