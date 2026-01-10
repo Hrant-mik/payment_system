@@ -1,13 +1,51 @@
-<h1>Your Order</h1>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Order</title>
+  <link rel="stylesheet" href="{% static 'shop/order.css' %}">
+</head>
+<body>
 
-{% for oi in order.items.all %}
-  <p>{{ oi.item.name }} × {{ oi.quantity }}</p>
-{% empty %}
-  <p>Order is empty</p>
-{% endfor %}
+<div class="container">
+  <h1>🛒 Your Order</h1>
 
-<h3>Total: ${{ order.total_amount|floatformat:2 }}</h3>
+  {% if order.items.exists %}
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+      {% for oi in order.items.all %}
+      <tr>
+        <td>{{ oi.item.name }}</td>
+        <td>{{ oi.quantity }}</td>
+        <td>${{ oi.item.price_dollars|floatformat:2 }}</td>
+        <td>
+          <a href="{% url 'cancel_order_item' oi.id %}" class="btn btn-remove">Remove</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
 
-<a href="/pay-order/">
-  <button>Pay Order</button>
-</a>
+    <div class="total">
+      Total: ${{ order.total_amount_dollars|floatformat:2 }}
+    </div>
+
+    <div class="actions">
+      <a href="{% url 'pay_order' %}" class="btn btn-pay">💳 Pay Order</a>
+      <a href="{% url 'home' %}" class="btn btn-back">⬅ Back to Shop</a>
+    </div>
+
+  {% else %}
+    <p class="empty">Your order is empty.</p>
+    <a href="{% url 'home' %}" class="btn btn-back">⬅ Back to Shop</a>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

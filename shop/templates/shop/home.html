@@ -1,36 +1,40 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Shop</title>
-  <style>
-    body { font-family: Arial; background:#f5f5f5 }
-    .item { background:#fff; padding:20px; margin:20px; border-radius:8px }
-    button { padding:8px 12px; margin-top:5px }
-  </style>
+  <link rel="stylesheet" href="{% static 'shop/styles.css' %}">
 </head>
 <body>
 
-<h1>Products</h1>
-<a href="/order/">🛒 Go to Order</a>
+<header>
+  <h1>Shop</h1>
+  <a href="{% url 'order' %}" class="btn cart">🛒 Your Order</a>
+</header>
 
-{% for item in items %}
-<div class="item">
-  <h2>{{ item.name }}</h2>
-  <p>{{ item.description }}</p>
-  <p><b>${{ item.price|floatformat:2 }}</b></p>
-  <p><b>{{ item.price|floatformat:2 }} {{ item.currency|upper }}</b></p>
+<main>
+  <div class="products">
+    {% for item in items %}
+    <div class="product-card">
+      <h2>{{ item.name }}</h2>
+      <p>{{ item.description }}</p>
+      <p class="price">{{ item.price_dollars|floatformat:2 }} {{ item.currency|upper }}</p>
 
-  <form action="/add/{{ item.id }}/" method="post">
-    {% csrf_token %}
-    Qty: <input type="number" name="quantity" value="1" min="1">
-    <button>Add to Order</button>
-  </form>
+      <form action="{% url 'add_to_order' item.id %}" method="post" class="add-form">
+        {% csrf_token %}
+        <label>Qty: 
+          <input type="number" name="quantity" value="1" min="1">
+        </label>
+        <button type="submit" class="btn add">Add to Order</button>
+      </form>
 
-  <a href="/buy/{{ item.id }}/">
-    <button>Buy now</button>
-  </a>
-</div>
-{% endfor %}
+      <a href="{% url 'buy_now' item.id %}" class="btn buy">Buy Now</a>
+
+    </div>
+    {% endfor %}
+  </div>
+</main>
 
 </body>
 </html>
