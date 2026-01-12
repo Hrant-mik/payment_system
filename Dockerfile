@@ -1,17 +1,19 @@
+# Base image
 FROM python:3.12-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
+# Set working directory
 WORKDIR /app
 
+# Install dependencies
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
-
+# Copy project files
 COPY . .
 
-EXPOSE 8000
+# Copy entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-CMD ["python", "manage.py", "runserver", "http://127.0.0.1:8000/"]
+# Run entrypoint
+CMD ["/entrypoint.sh"]
