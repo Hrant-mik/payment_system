@@ -8,7 +8,6 @@ class Item(models.Model):
     description = models.TextField(blank=True)
     price = models.PositiveIntegerField(help_text="Price in cents")
     currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='usd')
-
     @property
     def price_dollars(self):
         return self.price / 100
@@ -29,8 +28,6 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     currency = models.CharField(max_length=3, choices=Item.CURRENCY_CHOICES, default='usd')
 
-    def total_amount(self):
-        return sum([oi.quantity * oi.item.price for oi in self.items.all()])
     
     @property
     def total_amount(self):
