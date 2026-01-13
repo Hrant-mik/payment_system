@@ -9,5 +9,5 @@ COPY . .
 
 ENV PYTHONUNBUFFERED=1
 
-# Run the shell script using sh
+
 CMD ["sh", "./start.sh"]
