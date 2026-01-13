@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Shop</title>
-  <link rel="stylesheet" href="{% static 'shop/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'shop/home.css' %}">
 </head>
 <body>
 
@@ -13,25 +13,47 @@
   <a href="{% url 'order' %}" class="btn cart">🛒 Your Order</a>
 </header>
 
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
 <main>
   <div class="products">
     {% for item in items %}
-    <div class="product-card">
-      <h2>{{ item.name }}</h2>
-      <p>{{ item.description }}</p>
-      <p class="price">{{ item.price_dollars|floatformat:2 }} {{ item.currency|upper }}</p>
+      <div class="product-card">
+        <h2>{{ item.name }}</h2>
+        <p>{{ item.description }}</p>
+        <p class="price">
+          {{ item.price_dollars|floatformat:2 }} {{ item.currency|upper }}
+        </p>
 
-      <form action="{% url 'add_to_order' item.id %}" method="post" class="add-form">
-        {% csrf_token %}
-        <label>Qty: 
-          <input type="number" name="quantity" value="1" min="1">
-        </label>
-        <button type="submit" class="btn add">Add to Order</button>
-      </form>
+        <form method="post" class="add-form">
+          {% csrf_token %}
 
-      <a href="{% url 'buy_now' item.id %}" class="btn buy">Buy Now</a>
+          <label>
+            Qty:
+            <input type="number" name="quantity" value="1" min="1">
+          </label>
 
-    </div>
+          <div class="actions">
+            <button
+              type="submit"
+              formaction="{% url 'add_to_order' item.id %}"
+              class="btn add">
+              Add to Order
+            </button>
+
+            <button
+              type="submit"
+              formaction="{% url 'buy_now' item.id %}"
+              class="btn buy">
+              Buy Now
+            </button>
+          </div>
+        </form>
+      </div>
     {% endfor %}
   </div>
 </main>

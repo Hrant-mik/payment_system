@@ -6,8 +6,14 @@
   <title>Your Order</title>
   <link rel="stylesheet" href="{% static 'shop/order.css' %}">
 </head>
-<body>
 
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert">{{ message }}</div>
+  {% endfor %}
+{% endif %}
+
+<body>
 <div class="container">
   <h1>🛒 Your Order</h1>
 
